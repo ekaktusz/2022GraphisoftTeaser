@@ -21,19 +21,15 @@ void WordleSolver::processPair(const std::string& result, const std::string& tip
 {
 	for (int char_pos = 0; char_pos < 5; ++char_pos)
 	{
-		//std::cout << std::to_string(char_pos) << ". iter: ";
-		//printPossibleSolutions();
-
 		char tip_char = tip[char_pos];
 		char result_char = result[char_pos];
 
+		// Check for duplicates
 		std::string temp_tip = tip;
-		temp_tip[char_pos] = 0; // replace all tip_char to 0
+		temp_tip[char_pos] = 0; // replace current char to don't find it again
 		int other_occurence_position = temp_tip.find(tip_char);
 		char other_result_char = '0';
-
-		int num = std::count(tip.begin(), tip.end(), tip_char);
-
+		int num = std::count(tip.begin(), tip.end(), tip_char); // number of the char repating in the word
 		if (other_occurence_position != std::string::npos)
 		{
 			other_result_char = result[other_occurence_position];
@@ -41,32 +37,28 @@ void WordleSolver::processPair(const std::string& result, const std::string& tip
 
 		if (result_char == 'o')
 		{
-		//	if (other_result_char == 'o') removeOptionsWithoutRepatingChar(tip_char);
-		//	if (other_result_char == 'x') removeOptionsWithoutRepatingChar(tip_char);
 			// remove every instance where char is not in the position
 			removeOptionsCharNotInPosition(tip_char, char_pos);
 		}
 		else if (result_char == 'x')
 		{
+			// O and X in the same time means there is char repeat
 			if (other_result_char == 'o') removeOptionsWithoutRepatingChar(tip_char);
 			if (other_result_char == 'x') removeOptionsWithoutRepatingChar(tip_char);
-			// remove every word, where char is not in the word
+			// remove every word, where char is not in the word, or the char is in this position
 			removeOptionsCharNotInWord(tip_char, char_pos);
 		}
 		else if (result_char == '-')
 		{
+			// - with O or X means there is NO char repeat (num ==2) is required, cause it's not true if there is 3 of the same char
 			if (other_result_char == 'o')
 			{
-				if (num == 2) {
-					removeOptionsWithRepeatingChar(tip_char);
-				}
+				if (num == 2) removeOptionsWithRepeatingChar(tip_char);
 				continue;
 			}
 			if (other_result_char == 'x')
 			{
-				if (num == 2) {
-					removeOptionsWithRepeatingChar(tip_char);
-				}
+				if (num == 2) removeOptionsWithRepeatingChar(tip_char);
 				continue;
 			}
 			// remove every word where char is in the word (és az elõzõek között nincs x vagy o ugyanilyen karakterre)
