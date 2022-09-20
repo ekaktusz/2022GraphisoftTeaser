@@ -24,6 +24,7 @@
     <ProjectGuid>{3883411a-f34c-43c3-aa2d-79dd9e10cb2d}</ProjectGuid>
     <RootNamespace>GraphistoftTeaser</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>GraphisoftTeaser</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
