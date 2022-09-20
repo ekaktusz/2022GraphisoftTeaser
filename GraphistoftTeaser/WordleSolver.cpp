@@ -21,8 +21,8 @@ void WordleSolver::processPair(const std::string& result, const std::string& tip
 {
 	for (int char_pos = 0; char_pos < 5; ++char_pos)
 	{
-		std::cout << std::to_string(char_pos) << ". iter: ";
-		printPossibleSolutions();
+		//std::cout << std::to_string(char_pos) << ". iter: ";
+		//printPossibleSolutions();
 
 		char tip_char = tip[char_pos];
 		char result_char = result[char_pos];
@@ -30,50 +30,47 @@ void WordleSolver::processPair(const std::string& result, const std::string& tip
 		std::string temp_tip = tip;
 		temp_tip[char_pos] = 0; // replace all tip_char to 0
 		int other_occurence_position = temp_tip.find(tip_char);
+		char other_result_char = '0';
+
+		int num = std::count(tip.begin(), tip.end(), tip_char);
 
 		if (other_occurence_position != std::string::npos)
 		{
-			if (result[other_occurence_position] == 'o') // van valahol ugyanerre a karakterre o
-			{
-				if (result_char == 'x')
-				{
-					removeOptionsWithoutRepatingChar(tip_char);
-				}//bizti van legalább kettõ
-				else if (result_char == '-')
-				{
-					removeOptionsWithRepeatingChar(tip_char);
-					continue;
-				}
-				else if (result_char == 'o')
-				{
-
-				}
-				//continue;
-			}
-			if (result[other_occurence_position] == 'x') // van valahol ugyanerre a karakterre x
-			{
-				if (result_char == 'o')
-				{
-					removeOptionsWithoutRepatingChar(tip_char);
-				}//bizti van legalább kettõ
-				if (result_char == '-') continue;
-			}
+			other_result_char = result[other_occurence_position];
 		}
 
 		if (result_char == 'o')
 		{
+		//	if (other_result_char == 'o') removeOptionsWithoutRepatingChar(tip_char);
+		//	if (other_result_char == 'x') removeOptionsWithoutRepatingChar(tip_char);
 			// remove every instance where char is not in the position
 			removeOptionsCharNotInPosition(tip_char, char_pos);
 		}
-		else if (result_char == '-')
-		{
-			// remove every word where char is in the word (és az elõzõek között nincs x vagy o ugyanilyen karakterre)
-			removeOptionsCharInWord(tip_char);
-		}
 		else if (result_char == 'x')
 		{
+			if (other_result_char == 'o') removeOptionsWithoutRepatingChar(tip_char);
+			if (other_result_char == 'x') removeOptionsWithoutRepatingChar(tip_char);
 			// remove every word, where char is not in the word
 			removeOptionsCharNotInWord(tip_char, char_pos);
+		}
+		else if (result_char == '-')
+		{
+			if (other_result_char == 'o')
+			{
+				if (num == 2) {
+					removeOptionsWithRepeatingChar(tip_char);
+				}
+				continue;
+			}
+			if (other_result_char == 'x')
+			{
+				if (num == 2) {
+					removeOptionsWithRepeatingChar(tip_char);
+				}
+				continue;
+			}
+			// remove every word where char is in the word (és az elõzõek között nincs x vagy o ugyanilyen karakterre)
+			removeOptionsCharInWord(tip_char);
 		}
 	}
 }
